@@ -18,12 +18,7 @@ export class AppController {
       messages: [
         {
           role: 'system',
-          content: `You are a helpful assistant. Your reply should be like so, 
-          with major role and secondary role separated by a slash, 
-          nothing more than that, no extra text, omit the text in brackets:
-          Predicted Role: devops engineer(major role, closer to my skills)/
-          system engineer(another role, close to my skills)/
-          network(another role,close to my skills)`,
+          content: `You are a helpful assistant.`,
         },
         {
           role: 'user',
