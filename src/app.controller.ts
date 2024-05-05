@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import OpenAI from 'openai';
 import * as dotenv from 'dotenv';
-import { GenerateRoadmapDTO } from './app.dto';
+import { GPTResponseDTO } from './app.dto';
 
 dotenv.config();
 
@@ -12,34 +12,44 @@ const openai = new OpenAI();
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('/api/role-prediction')
-  async getApi() {
+  @Post('/api/prediction')
+  async getApi(@Body() gPTResponseDTO: GPTResponseDTO) {
     const completion = await openai.chat.completions.create({
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'Who won the world series in 2020?' },
+        {
+          role: 'system',
+          content: `You are a helpful assistant. Your reply should be like so, 
+          with major role and secondary role separated by a slash, 
+          nothing more than that, no extra text, omit the text in brackets:
+          Predicted Role: devops engineer(major role, closer to my skills)/
+          system engineer(another role, close to my skills)/
+          network(another role,close to my skills)`,
+        },
+        {
+          role: 'user',
+          content: gPTResponseDTO.content,
+        },
       ],
-      // model: 'gpt-3.5-turbo',
       model: 'gpt-4-turbo',
     });
-
-    return completion.choices[0].message;
+    gPTResponseDTO = completion.choices[0].message;
+    return gPTResponseDTO;
   }
 
   @Post('/api/roadmap')
-  async GenerateRoadmap(@Body() generateRoadmapDTO: GenerateRoadmapDTO) {
+  async GenerateRoadmap(@Body() gPTResponseDTO: GPTResponseDTO) {
     const completion = await openai.chat.completions.create({
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
         {
           role: 'user',
-          content: generateRoadmapDTO.content,
+          content: gPTResponseDTO.content,
         },
       ],
       model: 'gpt-4-turbo',
     });
-    generateRoadmapDTO = completion.choices[0].message;
-    return generateRoadmapDTO;
+    gPTResponseDTO = completion.choices[0].message;
+    return gPTResponseDTO;
   }
 
   getHello() {
