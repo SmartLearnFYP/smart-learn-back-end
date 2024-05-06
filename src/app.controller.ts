@@ -12,8 +12,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('/api/chat')
-  async ChatWithGPT(gPTResponseDTO: GPTResponseDTO) {
-    return this.appService.ChatWithGPT(gPTResponseDTO);
+  async ChatWithGPT(@Body() gPTResponseDTO: GPTResponseDTO) {
+    return this.appService.ConnectToOpenAI(gPTResponseDTO);
   }
 
   @Post('/api/prediction')

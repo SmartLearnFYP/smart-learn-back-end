@@ -27,17 +27,13 @@ export class AppService {
   }
 
   async ChatWithGPT(data: GPTResponseDTO) {
-    let all_messages: Array<GPTResponseDTO> = [];
+    let all_messages: Array<GPTResponseDTO> = [data];
 
     if (all_messages.length === 35) {
       all_messages = [];
     } else {
-      all_messages.push(data);
-      // all_messages.push({
-      //   role: 'user',
-      //   content: data.content,
-      // });
-      console.log(data);
+      // all_messages.push(data);
+      console.log('data: ', data.content);
       const completion = await openai.chat.completions.create({
         messages: [
           { role: 'system', content: 'You are a helpful assistant.' },
