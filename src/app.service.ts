@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import OpenAI from 'openai';
 import * as dotenv from 'dotenv';
+import { GPTResponseDTO } from './app.dto';
 
 dotenv.config();
 
@@ -8,33 +9,48 @@ const openai = new OpenAI();
 
 @Injectable()
 export class AppService {
-  async getApi() {
+  constructor() {}
+
+  async ConnectToOpenAI(data: GPTResponseDTO) {
     const completion = await openai.chat.completions.create({
       messages: [
         { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'Who won the world series in 2020?' },
+        {
+          role: 'user',
+          content: data.content,
+        },
       ],
-      // model: 'gpt-3.5-turbo',
       model: 'gpt-4-turbo',
     });
 
     return completion.choices[0].message;
   }
 
-  GenerateRoadmap = async () => {
-    const completion = await openai.chat.completions.create({
-      messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
-        { role: 'user', content: 'Who won the world series in 2020?' },
-      ],
-      // model: 'gpt-3.5-turbo',
-      model: 'gpt-4-turbo',
-    });
+  async ChatWithGPT(data: GPTResponseDTO) {
+    let all_messages: Array<GPTResponseDTO> = [];
 
-    return completion.choices[0];
-  };
+    if (all_messages.length === 35) {
+      all_messages = [];
+    } else {
+      all_messages.push(data);
+      // all_messages.push({
+      //   role: 'user',
+      //   content: data.content,
+      // });
+      console.log(data);
+      const completion = await openai.chat.completions.create({
+        messages: [
+          { role: 'system', content: 'You are a helpful assistant.' },
+          {
+            role: 'user',
+            content: data.content,
+          },
+        ],
+        model: 'gpt-4-turbo',
+      });
 
-  getHello() {
-    return 'Hello World!';
+      all_messages.push(completion.choices[0].message);
+    }
+    return all_messages;
   }
 }
