@@ -3,11 +3,6 @@ export class GPTResponseDTO {
   content: string;
 }
 
-export class ChatGPTDTO {
-  messages: [
-    {
-      role: string;
-      content: string;
-    },
-  ];
+export class ChatGPTdto {
+  messages: [];
 }

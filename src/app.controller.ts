@@ -1,7 +1,7 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import * as dotenv from 'dotenv';
-import { GPTResponseDTO } from './app.dto';
+import { ChatGPTdto, GPTResponseDTO } from './app.dto';
 
 dotenv.config();
 
@@ -12,8 +12,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('/api/chat')
-  async ChatWithGPT(@Body() gPTResponseDTO: GPTResponseDTO) {
-    return this.appService.ConnectToOpenAI(gPTResponseDTO);
+  async ChatWithGPT(@Body() chatGPTdto: ChatGPTdto) {
+    return this.appService.ChatWithGPT(chatGPTdto);
   }
 
   @Post('/api/prediction')
