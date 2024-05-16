@@ -20,7 +20,7 @@ export class AppService {
           content: data.content,
         },
       ],
-      model: 'gpt-4-turbo',
+      model: 'gpt-4o',
     });
 
     return completion.choices[0].message;
@@ -29,7 +29,7 @@ export class AppService {
   async ChatWithGPT(data: ChatGPTdto) {
     const completion = await openai.chat.completions.create({
       messages: data.messages,
-      model: 'gpt-4-turbo',
+      model: 'gpt-4o',
     });
 
     return completion.choices[0].message;
