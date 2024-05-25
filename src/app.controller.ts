@@ -5,8 +5,6 @@ import { ChatGPTdto, GPTResponseDTO } from './app.dto';
 
 dotenv.config();
 
-// const openai = new OpenAI();
-
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -16,13 +14,8 @@ export class AppController {
     return this.appService.ChatWithGPT(chatGPTdto);
   }
 
-  @Post('/api/prediction')
+  @Post('/api/ai')
   async GetPrediction(@Body() gPTResponseDTO: GPTResponseDTO) {
-    return this.appService.ConnectToOpenAI(gPTResponseDTO);
-  }
-
-  @Post('/api/roadmap')
-  async GenerateRoadmap(@Body() gPTResponseDTO: GPTResponseDTO) {
     return this.appService.ConnectToOpenAI(gPTResponseDTO);
   }
 }
